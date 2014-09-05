@@ -3,26 +3,42 @@
  */
 var express = require('express');
 var router = express.Router();
+var mongoose = require("mongoose");
+mongoose.connect('mongodb://localhost/test');
+
+var Schema = mongoose.Schema;
+var PostSchema = new Schema({
+    name : String,
+    comment : String
+});
+var Post = mongoose.model("Post", PostSchema);
 
 /* GET home page. */
 router.route("/")
     .get(function(req,res){
-        res.json({message:"get"});
+        Post.find(function(err, posts){
+            if(err){
+                res.send(err);
+            }
+            res.json({
+                message: "get",
+                items: posts
+            });
+        });
     })
     .post(function(req,res){
-        console.log(req.param("name"));
-        console.log(req.param("comment"));
-        res.json({message:"post"});
+        var item = new Post();
+        item.name = req.param("name");
+        item.comment = req.param("comment");
+        item.save(function(err){
+            if(err){
+                res.send(err);
+            }
+            res.json({message:"post"});
+        });
 
-    })
-    .put(function(req,res){
-        res.json({message:"put"});
+    });
 
-    })
-    .delete(function(req,res){
-        res.json({message:"delete"});
-
-    })
 
 
 module.exports = router;

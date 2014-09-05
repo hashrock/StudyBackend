@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+</head>
+<body>
+    <div id="main">
+        <div>
+            <p>
+                名前：
+                <input type="text" v-model="formName" />
+            </p>
+            <p>
+                コメント：
+                <input type="text" v-model="formComment" />
+            </p>
+            <p>
+                <button v-on="click: sendPost()">送信</button>
+            </p>
+        </div>
+
+        <p>{{message}}</p>
+
+        <ul>
+            <li v-repeat="item : items">
+                {{item.name}} - {{item.comment}}
+            </li>
+        </ul>
+    </div>
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/vue/dist/vue.js"></script>
+<script>
+    new Vue({
+        el: "#main",
+        data: {
+            formName: "",
+            formComment: "",
+            message: "ready",
+            items: [
+                {name: "181dev", comment:"Hello"}
+            ]
+        },
+        methods:{
+            sendPost: function(){
+                var data = {
+                    name: this.formName,
+                    comment: this.formComment
+                };
+                var self = this;
+                $.post("/posts", data, function(res){
+                    self.message = res.message;
+                    self.formComment = "";
+                    self.loadPost();
+                });
+            },
+            loadPost: function(){
+                var self = this;
+                $.getJSON("/posts", {}, function(res){
+                    self.items = res.items.reverse();
+                });
+            }
+        },
+        ready: function(){
+            this.loadPost();
+        }
+    });
+
+
+</script>
+</body>
+</html>
