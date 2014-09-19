@@ -1,6 +1,3 @@
-/**
- * Created by yuiwai on 2014/09/05.
- */
 var express = require('express');
 var router = express.Router();
 var mongoose = require("mongoose");
