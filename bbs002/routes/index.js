@@ -11,6 +11,16 @@ var PostSchema = new mongoose.Schema({
 });
 var Post = mongoose.model("Post", PostSchema);
 
+
+router.route("/:_id")
+    .get(function(req,res){
+        res.json({
+            message: req.param("_id")
+        });
+        //Post.findById(req.param("_id"))
+    });
+
+
 //どのようにテストしていくか…
 //個別記事の取得もできるようにしたい。
 router.route("/")
