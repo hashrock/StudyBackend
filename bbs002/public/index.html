@@ -8,6 +8,13 @@
     <p>TODO: Permalink, POST, List</p>
 
     <div id="main">
+        <div>
+            <input type="text" v-model="formName"/>
+            <input type="text" v-model="formText"/>
+            <button v-on="click: submitForm">Send</button>
+        </div>
+
+
         <p>{{message}}</p>
         <div v-repeat="post: posts">
             <h2>{{post.name}}</h2>
@@ -22,7 +29,19 @@
             el: "#main",
             data:{
                 posts: [],
-                message: ""
+                message: "",
+                formName: "",
+                formText: ""
+            },
+            methods: {
+                submitForm: function(){
+                    var name = this.formName;
+                    var text = this.formText;
+                    var self = this;
+                    $.post("/api", {name: name, text: text}, function(){
+                        self.message="success";
+                    });
+                }
             },
             ready: function(){
                 var self = this;
