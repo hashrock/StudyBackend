@@ -38,9 +38,23 @@
                     var name = this.formName;
                     var text = this.formText;
                     var self = this;
-                    $.post("/api", {name: name, text: text}, function(){
+
+
+                    var data = {name: name, text: text};
+                    $.post("/api", data)
+                        .done(function(){
+                            self.message="success";
+                                self.formText = "";
+
+                        });
+
+                    /*
+                     $.post("/api", , function(){
+                     });
+                    request.post('/api', {name: name, text: text}, function(error, res){
                         self.message="success";
                     });
+                     */
                 }
             },
             ready: function(){
