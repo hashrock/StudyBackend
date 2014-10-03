@@ -24,7 +24,9 @@
 
     <script src="jquery.min.js"></script>
     <script src="vue.min.js"></script>
+    <script src="superagent.js"></script>
     <script>
+        var request = window.superagent;
         new Vue({
             el: "#main",
             data:{
@@ -37,11 +39,18 @@
                 reloadPost: function(){
                     var self = this;
 
+                    /*
                     $.getJSON("/api", {}, function(data){
                         console.log(data);
                         self.posts = data.posts.reverse();
                         self.message = data.message;
                     });
+                    */
+                    request.get('/api',function(res){
+                        self.posts = res.body.posts.reverse();
+                        self.message = res.body.message;
+                    });
+
                 },
 
                 submitForm: function(){
@@ -51,20 +60,19 @@
 
 
                     var data = {name: name, text: text};
+                    /* jQuery
                     $.post("/api", data)
                         .done(function(){
                             self.message="success";
                             self.formText = "";
                             self.reloadPost();
                         });
-
-                    /*
-                     $.post("/api", , function(){
-                     });
-                    request.post('/api', {name: name, text: text}, function(error, res){
+                    */
+                    request.post('/api', data, function(error, res){
                         self.message="success";
+                        self.formText = "";
+                        self.reloadPost();
                     });
-                     */
                 }
             },
             ready: function(){
