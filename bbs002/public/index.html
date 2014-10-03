@@ -34,6 +34,16 @@
                 formText: ""
             },
             methods: {
+                reloadPost: function(){
+                    var self = this;
+
+                    $.getJSON("/api", {}, function(data){
+                        console.log(data);
+                        self.posts = data.posts.reverse();
+                        self.message = data.message;
+                    });
+                },
+
                 submitForm: function(){
                     var name = this.formName;
                     var text = this.formText;
@@ -44,8 +54,8 @@
                     $.post("/api", data)
                         .done(function(){
                             self.message="success";
-                                self.formText = "";
-
+                            self.formText = "";
+                            self.reloadPost();
                         });
 
                     /*
@@ -58,12 +68,7 @@
                 }
             },
             ready: function(){
-                var self = this;
-                $.getJSON("/api", {}, function(data){
-                    console.log(data);
-                    self.posts = data.posts;
-                    self.message = data.message;
-                });
+                this.reloadPost();
             }
         });
 
